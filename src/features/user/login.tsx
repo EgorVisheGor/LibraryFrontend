@@ -25,10 +25,14 @@ export const LoginForm: React.FC = () => {
     const auth = useAuth();
     return (
         <form className="z-50 bg-white flex flex-col w-[500px] rounded-lg">
-            <button>Вход</button>
-            <button onClick={RegisterForm}>Регистрация</button>
-            <input className="" type="text" placeholder="Имя пользователя" value={userdata.userName}/>
-            <input type="password" placeholder="Пароль" value={userdata.password}/>
+            <div className="relative">
+                <button className="w-1/2 absolute left-0">Вход</button>
+                <button onClick={() => RegisterForm} className="w-1/2 absolute right-0">Регистрация</button>
+            </div>
+            <p>Имя пользователя</p>
+            <input className="bg-white" id="userName" type="text" placeholder="Имя пользователя"
+                   value={userdata.userName}/>
+            <input className="bg-white" type="password" placeholder="Пароль" value={userdata.password}/>
             <button onClick={() => auth.login(userdata)}>Войти</button>
         </form>
     )
