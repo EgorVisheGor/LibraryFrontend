@@ -5,11 +5,11 @@ import {queryConfig} from "../../lib/reactQuery.ts";
 import {useQuery} from "react-query";
 
 export const getBooks = async () : Promise<GetBookByIdResponse[]>=> {
-    // return apiClient.get(`books/mainPage`).json();
-    return [{
-        author: "123",
-        name: "123"
-    }] as GetBookByIdResponse[];
+    return apiClient.get(`books/mainPage`).json();
+    // return [{
+    //     author: "123",
+    //     name: "123"
+    // }] as GetBookByIdResponse[];
 }
 
 type ReturnType = AsyncReturnType<typeof getBooks>;

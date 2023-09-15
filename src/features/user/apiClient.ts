@@ -22,7 +22,7 @@ class TokenManager {
 
 export const apiClient = ky.extend(
     {
-        prefixUrl: import.meta.env.VITE_API_URL || undefined,
+        prefixUrl: import.meta.env.BASE_URL || undefined,
         hooks: {
             beforeRequest: [
                 request => {
