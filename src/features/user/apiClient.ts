@@ -1,5 +1,16 @@
 ﻿import ky from "ky";
 
+interface AppConfiguration{
+    baseUrl: string;
+}
+
+const configInstance : AppConfiguration = {
+    baseUrl: import.meta.env.VITE_BASE_URL ?? ''
+}
+export function getConfig(): AppConfiguration {
+    return configInstance;
+}
+
 class TokenManager {
     private token: string | null = null;
 
@@ -22,7 +33,7 @@ class TokenManager {
 
 export const apiClient = ky.extend(
     {
-        prefixUrl: import.meta.env.BASE_URL || undefined,
+        prefixUrl: getConfig().baseUrl || undefined,
         hooks: {
             beforeRequest: [
                 request => {

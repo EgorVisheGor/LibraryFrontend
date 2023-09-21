@@ -2,10 +2,13 @@
 
 export interface GetBookByIdResponse {
     id: string,
-    name: string;
-    author: string;
+    title: string;
+    publicationDate: Date;
     description: string;
-    imageID: File;
+    coverUrl:string;
+    bookTags:string;
+    authorId: string;
+    applicationUserId:string;
 }
 
 export const GetBookById = (id: string): Promise<GetBookByIdResponse> => {

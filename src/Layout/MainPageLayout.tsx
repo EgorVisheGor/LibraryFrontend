@@ -1,10 +1,10 @@
-﻿import React, {useMemo} from "react";
+﻿import React from "react";
 import {BaseLayout} from "./BaseLayout.tsx";
 import {useBooks} from "../features/book/getBooks.tsx";
-import {Value} from "react-query/types/devtools/Explorer";
-import {bookDataDto} from "../features/book/bookDataDto.ts";
 import Carousel from "react-multi-carousel";
-import {GetBookById} from "../features/book/getBookById.tsx";
+
+import {GetCoverUrl} from "../features/images/GetImage.tsx";
+import {GetAuthorById} from "../features/author/GetAuthor.tsx";
 
 export const MainPageLayout: React.FC = () => {
     return (
@@ -17,33 +17,45 @@ export const MainPageLayout: React.FC = () => {
 const BookCarousel: React.FC = () => {
     const {data: books} = useBooks();
 
-    const items = useMemo(() => {
-        return books?.map((book) => ({
-                name: book.name,
-                author: book.author,
-                description: book.description,
-                id: book.id,
-            })
-        )
-    }, [books]);
-
     const responsive = {
         desktop: {
             breakpoint: {max: 3000, min: 1024},
-            items: 3,
-            slidesToSlide: 3 // optional, default to 1.
+            items: 1,
+            slidesToSlide: 1
         }
     };
 
-    const bookElements = items?.map((book) => (
-        <div className="shadow-lg h-[550px] w-full" onClick={() => GetBookById(book.id)}>
-            <img src="" alt={book.name}></img>
-            <p className="text-black">{book.name}</p>
+    const bookElements = books?.map((book) => (
+        <div className="shadow-mg h-[550px] w-full flex flex-row" onClick={() => {
+        }}>
+            <img src={GetCoverUrl(book.coverUrl)} alt={book.title} className="rounded-lg h-full left-0 w-1\3"></img>
+            <div className="right-0 top-0">
+                <p className="text-black text-left font-extrabold text-4xl">{book.title}</p>
+                <p></p>
+                <p className="text-black text-left text-xl">{book.description}</p>
+            </div>
         </div>
     ));
 
     return bookElements && (
-        <Carousel className="w-full" responsive={responsive}>
+        <Carousel
+            arrows={true}
+            swipeable={false}
+            draggable={false}
+            showDots={true}
+            responsive={responsive}
+            ssr={false}
+            infinite={true}
+            autoPlaySpeed={1000}
+            keyBoardControl={true}
+            customTransition=""
+            transitionDuration={500}
+            containerClass="carousel-container"
+            removeArrowOnDeviceType={["tablet", "mobile"]}
+            dotListClass="custom-dot-list-style"
+            itemClass="carousel-item-padding-40-px"
+            className="w-full overflow-hidden"
+        >
             {bookElements && bookElements}
         </Carousel>
     )
