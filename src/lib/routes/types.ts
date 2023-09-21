@@ -2,7 +2,7 @@
 
 export type targetType = 'document' | 'window' | React.Ref<HTMLElement> | undefined;
 
-export type moduleRoutes = {
+export type ModuleRoutes = {
     anonymous: RouteObject[];
     authenticated: RouteObject[];
     common: RouteObject[];

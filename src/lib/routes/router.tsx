@@ -1,9 +1,11 @@
-﻿import React from "react";
-import {createBrowserRouter, Outlet, RouteObject} from "react-router-dom";
+﻿// @ts-ignore
+import React from "react";
+import {createBrowserRouter, RouteObject} from "react-router-dom";
 import {MainPageLayout} from "../../Layout/MainPageLayout.tsx";
 import {AuthorizedRouteWrapper} from "./AuthorizedRouteWrapper.tsx";
 import {AnonymousRouteWrapper} from "./AnonymousRouteWrapper.tsx";
-import {moduleRoutes} from "./types.ts";
+import {ModuleRoutes} from "./types.ts";
+import {UserModuleRoutes} from "../../features/user/routes";
 
 export const authorizedRoutes: RouteObject ={
     path: "/",
@@ -14,7 +16,7 @@ export const authorizedRoutes: RouteObject ={
 export const anonymousRoutes: RouteObject ={
     path:"/",
     element: <AnonymousRouteWrapper />,
-    children:[]
+    children: [],
 }
 
 export const commonRoutes: RouteObject[] =[
@@ -24,11 +26,13 @@ export const commonRoutes: RouteObject[] =[
     }
 ]
 
-function registerModuleRoutes(routes: moduleRoutes) {
+function registerModuleRoutes(routes: ModuleRoutes) {
     anonymousRoutes.children!.push(...routes.anonymous);
     authorizedRoutes.children!.push(...routes.authenticated);
     commonRoutes.push(...routes.common);
 }
+
+registerModuleRoutes(UserModuleRoutes);
 
 export const router =  createBrowserRouter([
     {

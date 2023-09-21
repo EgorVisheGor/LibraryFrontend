@@ -2,9 +2,7 @@
 import {BaseLayout} from "./BaseLayout.tsx";
 import {useBooks} from "../features/book/getBooks.tsx";
 import Carousel from "react-multi-carousel";
-
 import {GetCoverUrl} from "../features/images/GetImage.tsx";
-import {GetAuthorById} from "../features/author/GetAuthor.tsx";
 
 export const MainPageLayout: React.FC = () => {
     return (

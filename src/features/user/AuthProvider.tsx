@@ -1,4 +1,4 @@
-﻿import React, {ReactNode, useCallback, useState} from "react";
+﻿import React from "react";
 import {userProfileDto} from "./userProfileDto.ts";
 import {
     QueryObserverResult,
@@ -12,8 +12,8 @@ import {BaseError} from "../../lib/dto.ts";
 import {tokenStore} from "./apiClient.ts";
 import {HTTPError} from "ky";
 import {getMyUser} from "./getMyUser.ts";
-import {loginRequestDto, loginResponseDto, login, LoginForm} from "./login.tsx";
-import {registerResponseDto, registerRequestDto, register, RegisterForm} from "./register.tsx";
+import {login, loginRequestDto, loginResponseDto} from "./api/login.ts";
+import {register, registerRequestDto, registerResponseDto} from "./api/register.ts";
 
 
 export type authContextValue = {
@@ -26,7 +26,6 @@ export type authContextValue = {
     reFetchUser: (
         options?: RefetchOptions | undefined) =>
         Promise<QueryObserverResult<userProfileDto | null, BaseError>>
-    openAuthModal: (type: "login" | "register") => void;
 };
 
 const authContext = React.createContext<authContextValue | null>(null);
@@ -64,11 +63,6 @@ export const AuthProvider = ({children}: authProviderProps) => {
         },
     });
 
-    const setUser = React.useCallback(
-        (data: userProfileDto) => queryClient.setQueryData(userKey, data),
-        [queryClient]
-    );
-
     const loginMutation = useMutation<loginResponseDto, BaseError, loginRequestDto>({
         mutationFn: login,
         onSuccess: responce => {
@@ -90,10 +84,6 @@ export const AuthProvider = ({children}: authProviderProps) => {
         queryClient.invalidateQueries(userKey);
     }, [queryClient]);
 
-    const [openType, setOpenType] = useState<"login" | "register" | null>();
-
-    const openAuthModal = useCallback((type: "login" | "register") => setOpenType(type), [setOpenType])
-
     const value = React.useMemo<authContextValue>(
         () => ({
             user: user ?? null,
@@ -103,35 +93,20 @@ export const AuthProvider = ({children}: authProviderProps) => {
             isLoggingIn: loginMutation.isLoading,
             isRegistering: registerMutation.isLoading,
             reFetchUser: refetch,
-            openAuthModal: openAuthModal
         }), [
             user,
             loginMutation.mutateAsync,
             registerMutation.mutateAsync,
             logout,
-            openAuthModal,
             loginMutation.isLoading,
             registerMutation.isLoading,
             refetch,
         ]
     );
-
-    let modal: React.ReactElement | null = null
-
-    switch (openType) {
-        case "register":
-            modal = (<RegisterForm/>);
-            break;
-        case "login":
-            modal = (<LoginForm/>);
-            break;
-    }
-
-
+    
     if (isSuccess) {
         return (
             <authContext.Provider value={value}>
-                {modal}
                 {children}
             </authContext.Provider>
         );
